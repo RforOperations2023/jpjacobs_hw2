@@ -19,11 +19,20 @@ library(plotly)
 # Load bee data
 ###############
 
+# Read in CSV
 bee <- read_csv("vHoneyNeonic_v03.csv")
 
 # Define factor columns
 bee$Region <- as.factor(bee$Region)
 bee$state <- as.factor(bee$state)
+
+# Fill NA values in pesticide columns
+bee$nCLOTHIANIDIN <- bee$nCLOTHIANIDIN %>% replace_na(0)
+bee$nIMIDACLOPRID <- bee$nIMIDACLOPRID %>% replace_na(0)
+bee$nTHIAMETHOXAM <- bee$nTHIAMETHOXAM %>% replace_na(0)
+bee$nACETAMIPRID <- bee$nACETAMIPRID %>% replace_na(0)
+bee$nTHIACLOPRID <- bee$nTHIACLOPRID %>% replace_na(0)
+bee$nAllNeonic <- bee$nAllNeonic %>% replace_na(0)
 
 
 #############
@@ -77,14 +86,7 @@ ui <- dashboardPage(
           min = min(bee$nAllNeonic, na.rm=T),
           max = max(bee$nAllNeonic, na.rm=T)
         )
-      ),
-      
-      # Filter for records with NA neonic values
-      checkboxInput(
-        "neonic.nulls", "Include entries with missing pesticide data?",
-        value=T
       )
-      
     )
   ),
   
@@ -145,8 +147,9 @@ ui <- dashboardPage(
         # Data table
         fluidRow(
           box(
+            width=12,
             title="Honey Production Data",
-            dataTableOutput("honey.data")
+            DTOutput("honey.data")
           )
         )
       )
@@ -161,15 +164,50 @@ ui <- dashboardPage(
 
 server <- function(input, output) {
   
-  # # Reactive data function
-  # bee.input <- reactive({
-  #   req(input$region)  # Require non-null region selection
-  #   filter(bee,
-  #     Region %in% input$region &
-  #     numcol >= input$year[1] &
-  #     year <= input$year[2]
-  #   )
-  # })
+  # Reactive data function
+  bee.input <- reactive({
+    
+    # Require non-null region selection
+    req(input$reg)
+    
+    # Filter according to sliders & region checks
+    bee.subset <- bee %>%
+      select(
+        StateName, year, numcol, totalprod, yieldpercol,
+        priceperlb, prodvalue, Region, nAllNeonic
+      ) %>%
+      filter(
+        Region %in% input$reg &
+        year >= input$year[1] &
+        year <= input$year[2] &
+        nAllNeonic >= input$neonic[1] &
+        nAllNeonic <= input$neonic[2]
+      )
+  })
+  
+  ## Yield per colony tab ##
+  # TODO: Reactive mean.ypc box
+  
+  # TODO: Reactive mean.ypc per year line plot
+  
+  ## Price per pound tab ##
+  # TODO: Reactive mean.ppp box
+  
+  # TODO: Reactive mean.ppp per year line plot
+  
+  ## Total honey produced tab ##
+  # TODO: Reactive sum.total box
+  
+  # TODO: Reactive total.produced per year bar plot
+  
+  # Data table
+  output$honey.data <- renderDT({
+    datatable(
+      data = bee.input(),
+      options = list(pageLength=10),
+      rownames=F
+    )
+  })
 }
 
 
