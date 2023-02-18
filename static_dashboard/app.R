@@ -270,7 +270,19 @@ server <- function(input, output) {
     )
   })
   
-  # TODO: Reactive total.produced per year bar plot
+  # Reactive total.produced per year bar plot
+  output$total.plot <- renderPlotly({
+    ggplotly(
+      ggplot(
+        bee.input(),
+        aes(x=year, y=totalprod, color=Region)
+      ) +
+        geom_bar(stat="summary", fun="sum") +
+        theme_classic() +
+        xlab("Year") + ylab("Total honey produced (lb)"),
+      tooltip = c("year", "Region", "totalprod")
+    )
+  })
   
   # Data table
   output$honey.data <- renderDT({
