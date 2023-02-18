@@ -5,9 +5,9 @@ account: jackjacobs
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8350702
-bundleId: 6861332
+bundleId: 6861373
 url: https://jackjacobs.shinyapps.io/honey_production_static_dash/
-when: 1676732561.59892
-lastSyncTime: 1676732561.59892
+when: 1676733503.54238
+lastSyncTime: 1676733503.54238
 asMultiple: FALSE
 asStatic: FALSE
