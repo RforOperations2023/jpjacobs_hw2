@@ -208,6 +208,18 @@ server <- function(input, output) {
   })
   
   # TODO: Reactive mean.ypc per year line plot
+  output$ypc.plot <- renderPlotly({
+    ggplotly(
+      ggplot(
+        bee.input(),
+        aes(x=year, y=yieldpercol, color=Region)
+      ) +
+        geom_line(stat="summary", fun="mean") +
+        theme_classic() +
+        xlab("Year") + ylab("Yield per colony (lb)"),
+      tooltip = c("year", "Region", "yieldpercol")
+    )
+  })
   
   ## Price per pound tab ##
   # Reactive mean.ppp box
