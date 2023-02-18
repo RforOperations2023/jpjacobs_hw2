@@ -105,6 +105,7 @@ ui <- dashboardPage(
         # Yield per colony over time plot
         fluidRow(
           box(
+            width=12,
             title="Yield per Colony Over Time",
             plotlyOutput("ypc.plot")
           )
@@ -122,6 +123,7 @@ ui <- dashboardPage(
         # Price per pound over time plot
         fluidRow(
           box(
+            width=12,
             title="Price per Pound of Honey Over Time",
             plotlyOutput("ppp.plot")
           )
@@ -139,6 +141,7 @@ ui <- dashboardPage(
         # Total honey produced per year plot
         fluidRow(
           box(
+            width=12,
             title="Total Honey Produced per Year",
             plotlyOutput("total.plot")
           )
@@ -186,17 +189,62 @@ server <- function(input, output) {
   })
   
   ## Yield per colony tab ##
-  # TODO: Reactive mean.ypc box
+  
+  ## Reactive mean.ypc box
+  # Reactive mean ypc value
+  mean.ypc <- reactive({
+    req(input$reg)
+    bee.input()$yieldpercol %>%
+      mean() %>% round(2)
+  })
+  
+  # Mean ypc value box
+  output$mean.ypc <- renderValueBox({
+    valueBox(
+      format(mean.ypc(), big.mark=","),
+      "Mean Yield per Colony (lb per year)",
+      icon=icon("gears"), color="light-blue"
+    )
+  })
   
   # TODO: Reactive mean.ypc per year line plot
   
   ## Price per pound tab ##
-  # TODO: Reactive mean.ppp box
+  # Reactive mean.ppp box
+  # Reactive mean ppp value
+  mean.ppp <- reactive({
+    req(input$reg)
+    bee.input()$priceperlb %>%
+      mean() %>% round(2)
+  })
+  
+  # Mean ppp value box
+  output$mean.ppp <- renderValueBox({
+    valueBox(
+      paste("$", toString(format(mean.ppp(), big.mark=","), sep="")),
+      "Mean Price per Pound",
+      icon=icon("sack-dollar"), color="green"
+    )
+  })
   
   # TODO: Reactive mean.ppp per year line plot
   
   ## Total honey produced tab ##
-  # TODO: Reactive sum.total box
+  # Reactive sum.total box
+  # Reactive total produced value
+  sum.total <- reactive({
+    req(input$reg)
+    bee.input()$totalprod %>% sum()
+  })
+  
+  # Total produced value box
+  output$sum.total <- renderValueBox({
+    valueBox(
+      format(sum.total(), big.mark=","),
+      "Total Honey Production (lb)",
+      icon=icon("jar"), color="yellow"
+    )
+  })
   
   # TODO: Reactive total.produced per year bar plot
   
