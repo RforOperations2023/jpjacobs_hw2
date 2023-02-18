@@ -24,7 +24,6 @@ bee <- read_csv("vHoneyNeonic_v03.csv")
 # Define factor columns
 bee$Region <- as.factor(bee$Region)
 bee$state <- as.factor(bee$state)
-bee$year <- as.factor(bee$year)
 
 
 #############
@@ -32,9 +31,38 @@ bee$year <- as.factor(bee$year)
 #############
 
 ui <- dashboardPage(
-  dashboardHeader(),
-  dashboardSidebar(),
-  dashboardBody()
+  
+  # Set title
+  dashboardHeader(
+    title = "US Honey Production, 1991-2017",
+    titleWidth=350
+  ),
+  
+  # Define sidebar
+  dashboardSidebar(
+    
+    # Set tab titles
+    sidebarMenu(
+      menuItem("Yield per Colony", tabName="ypc"),
+      menuItem("Price per Pound", tabName="ppp"),
+      menuItem("Total Produced", tabName="total")
+    )
+  ),
+  
+  # Define body
+  dashboardBody(
+    tabItems(
+      
+      # Yield per colony tab content
+      tabItem(tabName="ypc"),
+      
+      # Price per pound tab content
+      tabItem(tabName="ppp"),
+      
+      # Total produced
+      tabItem(tabName="total")
+    )
+  )
 )
 
 
@@ -42,7 +70,18 @@ ui <- dashboardPage(
 # Define server #
 #################
 
-server <- function(input, output) { }
+server <- function(input, output) {
+  
+  # # Reactive data function
+  # bee.input <- reactive({
+  #   req(input$region)  # Require non-null region selection
+  #   filter(bee,
+  #     Region %in% input$region &
+  #     numcol >= input$year[1] &
+  #     year <= input$year[2]
+  #   )
+  # })
+}
 
 
 #######################
