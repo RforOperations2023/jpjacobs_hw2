@@ -40,12 +40,51 @@ ui <- dashboardPage(
   
   # Define sidebar
   dashboardSidebar(
-    
-    # Set tab titles
     sidebarMenu(
+      
+      # Set tab titles
       menuItem("Yield per Colony", tabName="ypc"),
       menuItem("Price per Pound", tabName="ppp"),
-      menuItem("Total Produced", tabName="total")
+      menuItem("Total Produced", tabName="total"),
+      
+      br(),  # Visual spacer
+      
+      ## Set filter inputs ##
+      # Select regions
+      checkboxGroupInput(
+        "reg", "Regions",
+        choices = bee$Region %>%
+          unique() %>% sort(),
+        selected = unique(bee$Region)
+      ),
+      
+      # Select year range
+      sliderInput(
+        "year","Year",
+        min = min(bee$year), max = max(bee$year),
+        value=c(
+          min = min(bee$year), max = max(bee$year)
+        ),
+        sep=""  # Remove comma separator for years
+      ),
+      
+      # Filter by range of neonic use
+      sliderInput(
+        "neonic", "Neonic Pesticides Used (kg)",
+        min = min(bee$nAllNeonic, na.rm=T),
+        max = max(bee$nAllNeonic, na.rm=T),
+        value=c(
+          min = min(bee$nAllNeonic, na.rm=T),
+          max = max(bee$nAllNeonic, na.rm=T)
+        )
+      ),
+      
+      # Filter for records with NA neonic values
+      checkboxInput(
+        "neonic.nulls", "Include entries with missing pesticide data?",
+        value=T
+      )
+      
     )
   ),
   
