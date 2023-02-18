@@ -207,7 +207,7 @@ server <- function(input, output) {
     )
   })
   
-  # TODO: Reactive mean.ypc per year line plot
+  # Reactive mean.ypc per year line plot
   output$ypc.plot <- renderPlotly({
     ggplotly(
       ggplot(
@@ -239,7 +239,19 @@ server <- function(input, output) {
     )
   })
   
-  # TODO: Reactive mean.ppp per year line plot
+  # Reactive mean.ppp per year line plot
+  output$ppp.plot <- renderPlotly({
+    ggplotly(
+      ggplot(
+        bee.input(),
+        aes(x=year, y=priceperlb, color=Region)
+      ) +
+        geom_line(stat="summary", fun="mean") +
+        theme_classic() +
+        xlab("Year") + ylab("Price per pound ($)"),
+      tooltip = c("year", "Region", "priceperlb")
+    )
+  })
   
   ## Total honey produced tab ##
   # Reactive sum.total box
