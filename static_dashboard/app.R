@@ -93,13 +93,63 @@ ui <- dashboardPage(
     tabItems(
       
       # Yield per colony tab content
-      tabItem(tabName="ypc"),
+      tabItem(tabName="ypc",
+        
+        # Average yield per colony gauge
+        fluidRow(
+          valueBoxOutput("mean.ypc")
+        ),
+        
+        # Yield per colony over time plot
+        fluidRow(
+          box(
+            title="Yield per Colony Over Time",
+            plotlyOutput("ypc.plot")
+          )
+        )
+      ),
       
       # Price per pound tab content
-      tabItem(tabName="ppp"),
+      tabItem(tabName="ppp",
+              
+        # Average price per pound gauge
+        fluidRow(
+          valueBoxOutput("mean.ppp")
+        ),
+        
+        # Price per pound over time plot
+        fluidRow(
+          box(
+            title="Price per Pound of Honey Over Time",
+            plotlyOutput("ppp.plot")
+          )
+        )
+      ),
       
       # Total produced
-      tabItem(tabName="total")
+      tabItem(tabName="total",
+              
+        # Sum total honey produced gauge
+        fluidRow(
+          valueBoxOutput("sum.total")
+        ),
+        
+        # Total honey produced per year plot
+        fluidRow(
+          box(
+            title="Total Honey Produced per Year",
+            plotlyOutput("total.plot")
+          )
+        ),
+        
+        # Data table
+        fluidRow(
+          box(
+            title="Honey Production Data",
+            dataTableOutput("honey.data")
+          )
+        )
+      )
     )
   )
 )
