@@ -1,4 +1,5 @@
-# jpjacobs_hw2
+# Static honey production dashboard
+jpjacobs_hw2
 
 ### Data
 "Honeybees and Neonic Pesticides" from [kaggle](https://www.kaggle.com/datasets/kevinzmith/honey-with-neonic-pesticide)
