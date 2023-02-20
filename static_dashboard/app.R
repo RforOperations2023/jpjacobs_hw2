@@ -276,7 +276,7 @@ server <- function(input, output) {
     ggplotly(
       ggplot(
         bee.input(),
-        aes(x=year, y=totalprod, color=Region)
+        aes(x=year, y=totalprod, fill=Region)
       ) +
         geom_bar(stat="summary", fun="sum") +
         theme_classic() +
